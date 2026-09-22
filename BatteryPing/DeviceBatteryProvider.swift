@@ -53,12 +53,11 @@ final class DeviceBatteryProvider: NSObject, CBCentralManagerDelegate, CBPeriphe
 
     func snapshot() -> [BatteryDevice] {
         #if targetEnvironment(simulator)
-        return iPhoneDevice().map { [$0] } ?? []
+        return [iPhoneDevice()]
         #else
         var merged: [String: BatteryDevice] = [:]
-        if let iPhone = iPhoneDevice() {
-            merged[iPhone.id] = iPhone
-        }
+        let iPhone = iPhoneDevice()
+        merged[iPhone.id] = iPhone
 
         for device in batteryCenterDevices() where device.kind != .iPhone {
             merged[device.id] = device
@@ -77,11 +76,11 @@ final class DeviceBatteryProvider: NSObject, CBCentralManagerDelegate, CBPeriphe
         #endif
     }
 
-    private func iPhoneDevice() -> BatteryDevice? {
+    private func iPhoneDevice() -> BatteryDevice {
         UIDevice.current.isBatteryMonitoringEnabled = true
         let level = UIDevice.current.batteryLevel
-        guard level >= 0 else { return nil }
-        let percentage = Int((level * 100).rounded())
+        let hasBatteryReading = level >= 0
+        let percentage = hasBatteryReading ? Int((level * 100).rounded()) : 0
         let charging: Bool = {
             switch UIDevice.current.batteryState {
             case .charging, .full: return true
@@ -93,6 +92,7 @@ final class DeviceBatteryProvider: NSObject, CBCentralManagerDelegate, CBPeriphe
             id: "iphone",
             name: UIDevice.current.name,
             percentage: percentage,
+            isAvailable: hasBatteryReading,
             isCharging: charging,
             kind: .iPhone
         )

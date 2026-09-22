@@ -96,6 +96,7 @@ struct GlassCard<Content: View>: View {
 
 struct BatteryHalo: View {
     var percentage: Int
+    var isAvailable = true
     var isCharging: Bool
     var label: String
 
@@ -105,7 +106,7 @@ struct BatteryHalo: View {
                 .stroke(.white.opacity(0.08), lineWidth: 16)
 
             Circle()
-                .trim(from: 0, to: CGFloat(percentage) / 100)
+                .trim(from: 0, to: isAvailable ? CGFloat(percentage) / 100 : 0)
                 .stroke(
                     AngularGradient(
                         colors: [
@@ -127,16 +128,16 @@ struct BatteryHalo: View {
                         .foregroundStyle(AppTheme.mint)
                 }
                 HStack(alignment: .firstTextBaseline, spacing: 2) {
-                    Text("\(percentage)")
+                    Text(isAvailable ? "\(percentage)" : "—")
                         .font(AppTheme.display(64))
                         .monospacedDigit()
                         .foregroundStyle(.white)
-                    Text("%")
+                    Text(isAvailable ? "%" : "")
                         .font(AppTheme.display(26, weight: .semibold))
                         .foregroundStyle(.white.opacity(0.5))
                 }
 
-                Text(label.uppercased())
+                Text(isAvailable ? label.uppercased() : "BATTERY UNAVAILABLE")
                     .font(AppTheme.label(11, weight: .semibold))
                     .tracking(2.6)
                     .foregroundStyle(.white.opacity(0.48))
@@ -165,14 +166,14 @@ struct DeviceRowCard: View {
                     .font(AppTheme.label(16, weight: .semibold))
                     .foregroundStyle(.white)
                     .lineLimit(1)
-                Text(device.isCharging ? "Charging" : "Connected")
+                Text(!device.isAvailable ? "Battery unavailable" : (device.isCharging ? "Charging" : "Connected"))
                     .font(AppTheme.label(12, weight: .medium))
                     .foregroundStyle(.white.opacity(0.45))
             }
 
             Spacer()
 
-            Text("\(device.percentage)%")
+            Text(device.isAvailable ? "\(device.percentage)%" : "—")
                 .font(AppTheme.display(22, weight: .bold))
                 .monospacedDigit()
                 .foregroundStyle(device.tint.color)

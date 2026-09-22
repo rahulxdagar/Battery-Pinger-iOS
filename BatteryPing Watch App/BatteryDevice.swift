@@ -17,6 +17,7 @@ struct BatteryDevice: Identifiable, Hashable, Sendable {
     let id: String
     let name: String
     let percentage: Int
+    let isAvailable: Bool
     let isCharging: Bool
     let kind: Kind
 
@@ -38,12 +39,14 @@ struct BatteryDevice: Identifiable, Hashable, Sendable {
         id: String,
         name: String,
         percentage: Int,
+        isAvailable: Bool = true,
         isCharging: Bool,
         kind: Kind
     ) {
         self.id = id
         self.name = name
         self.percentage = min(100, max(0, percentage))
+        self.isAvailable = isAvailable
         self.isCharging = isCharging
         self.kind = kind
     }
@@ -61,6 +64,7 @@ struct BatteryDevice: Identifiable, Hashable, Sendable {
             id: id,
             name: name,
             percentage: percentage,
+            isAvailable: dictionary["isAvailable"] as? Bool ?? true,
             isCharging: dictionary["isCharging"] as? Bool ?? false,
             kind: kind
         )

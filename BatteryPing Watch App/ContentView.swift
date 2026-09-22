@@ -117,14 +117,14 @@ struct ContentView: View {
                 Text(device.name)
                     .font(AppTheme.label(13, weight: .semibold))
                     .lineLimit(1)
-                Text(device.isCharging ? "Charging" : "Connected")
+                Text(!device.isAvailable ? "Battery unavailable" : (device.isCharging ? "Charging" : "Connected"))
                     .font(AppTheme.label(11, weight: .medium))
                     .foregroundStyle(.white.opacity(0.45))
             }
 
             Spacer(minLength: 4)
 
-            Text("\(device.percentage)%")
+            Text(device.isAvailable ? "\(device.percentage)%" : "—")
                 .font(AppTheme.display(22, weight: .bold))
                 .monospacedDigit()
                 .foregroundStyle(device.tint.color)

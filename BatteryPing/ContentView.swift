@@ -66,6 +66,7 @@ struct ContentView: View {
                 VStack(spacing: 18) {
                     BatteryHalo(
                         percentage: iPhone.percentage,
+                        isAvailable: iPhone.isAvailable,
                         isCharging: iPhone.isCharging,
                         label: iPhone.name
                     )
