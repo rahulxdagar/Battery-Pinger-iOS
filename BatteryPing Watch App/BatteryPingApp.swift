@@ -9,9 +9,12 @@ import SwiftUI
 
 @main
 struct BatteryPing_Watch_AppApp: App {
+    @State private var connectivity = ConnectivityManager()
+
     var body: some Scene {
         WindowGroup {
             ContentView()
+                .environment(connectivity)
         }
     }
 }

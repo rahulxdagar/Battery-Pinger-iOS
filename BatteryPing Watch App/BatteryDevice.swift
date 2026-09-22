@@ -1,0 +1,84 @@
+//
+//  BatteryDevice.swift
+//  BatteryPing Watch App
+//
+
+import Foundation
+
+struct BatteryDevice: Identifiable, Hashable, Sendable {
+    enum Kind: String, Sendable {
+        case iPhone
+        case airPods
+        case airPodsCase
+        case headphones
+        case other
+    }
+
+    let id: String
+    let name: String
+    let percentage: Int
+    let isCharging: Bool
+    let kind: Kind
+
+    var symbolName: String {
+        switch kind {
+        case .iPhone: "iphone"
+        case .airPods: "airpods.pro"
+        case .airPodsCase: "airpods.chargingcase"
+        case .headphones: "headphones"
+        case .other: "battery.100percent"
+        }
+    }
+
+    var tint: BatteryTint {
+        BatteryTint.from(percentage: percentage)
+    }
+
+    init(
+        id: String,
+        name: String,
+        percentage: Int,
+        isCharging: Bool,
+        kind: Kind
+    ) {
+        self.id = id
+        self.name = name
+        self.percentage = min(100, max(0, percentage))
+        self.isCharging = isCharging
+        self.kind = kind
+    }
+
+    init?(dictionary: [String: Any]) {
+        guard
+            let id = dictionary["id"] as? String,
+            let name = dictionary["name"] as? String,
+            let percentage = dictionary["percentage"] as? Int,
+            let kindRaw = dictionary["kind"] as? String,
+            let kind = Kind(rawValue: kindRaw)
+        else { return nil }
+
+        self.init(
+            id: id,
+            name: name,
+            percentage: percentage,
+            isCharging: dictionary["isCharging"] as? Bool ?? false,
+            kind: kind
+        )
+    }
+}
+
+enum BatteryTint {
+    case high, medium, low
+
+    static func from(percentage: Int) -> BatteryTint {
+        if percentage >= 50 { return .high }
+        if percentage >= 20 { return .medium }
+        return .low
+    }
+}
+
+enum BatteryMessage {
+    static let requestKey = "request"
+    static let devicesRequest = "deviceBatteries"
+    static let devicesKey = "devices"
+}
