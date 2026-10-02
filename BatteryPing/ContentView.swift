@@ -127,7 +127,7 @@ struct ContentView: View {
                         Text("No accessories yet")
                             .font(AppTheme.label(17, weight: .semibold))
                             .foregroundStyle(.white)
-                        Text("Connect AirPods, their case, or external headphones. BatteryPing reads them when your Watch asks.")
+                                Text("Connect a Bluetooth accessory that exposes the standard Battery Service. BatteryPing reads it when your Watch asks.")
                             .font(AppTheme.label(14, weight: .medium))
                             .foregroundStyle(.white.opacity(0.5))
                     }
