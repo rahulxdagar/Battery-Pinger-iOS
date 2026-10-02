@@ -413,8 +413,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = BatteryPing;
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "BatteryPing reads battery levels from connected AirPods and Bluetooth headphones when Apple Watch asks for a snapshot.";
-				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "BatteryPing reads battery levels from connected AirPods and Bluetooth headphones when Apple Watch asks for a snapshot.";
+							INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "BatteryPing reads battery levels from supported connected Bluetooth accessories when Apple Watch asks for a snapshot.";
+							INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "BatteryPing reads battery levels from supported connected Bluetooth accessories when Apple Watch asks for a snapshot.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIBackgroundModes = "bluetooth-central";
@@ -450,8 +450,8 @@
 				ENABLE_PREVIEWS = YES;
 				GENERATE_INFOPLIST_FILE = YES;
 				INFOPLIST_KEY_CFBundleDisplayName = BatteryPing;
-				INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "BatteryPing reads battery levels from connected AirPods and Bluetooth headphones when Apple Watch asks for a snapshot.";
-				INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "BatteryPing reads battery levels from connected AirPods and Bluetooth headphones when Apple Watch asks for a snapshot.";
+							INFOPLIST_KEY_NSBluetoothAlwaysUsageDescription = "BatteryPing reads battery levels from supported connected Bluetooth accessories when Apple Watch asks for a snapshot.";
+							INFOPLIST_KEY_NSBluetoothPeripheralUsageDescription = "BatteryPing reads battery levels from supported connected Bluetooth accessories when Apple Watch asks for a snapshot.";
 				INFOPLIST_KEY_UIApplicationSceneManifest_Generation = YES;
 				INFOPLIST_KEY_UIApplicationSupportsIndirectInputEvents = YES;
 				INFOPLIST_KEY_UIBackgroundModes = "bluetooth-central";

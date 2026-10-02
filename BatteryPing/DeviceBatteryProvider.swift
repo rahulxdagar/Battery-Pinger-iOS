@@ -4,7 +4,6 @@
 //
 
 import CoreBluetooth
-import Darwin
 import Foundation
 import Observation
 import UIKit
@@ -21,7 +20,6 @@ final class DeviceBatteryProvider: NSObject, CBCentralManagerDelegate, CBPeriphe
 
     override init() {
         super.init()
-        loadBatteryCenterIfNeeded()
 
         #if !targetEnvironment(simulator)
         UIDevice.current.isBatteryMonitoringEnabled = true
@@ -59,9 +57,6 @@ final class DeviceBatteryProvider: NSObject, CBCentralManagerDelegate, CBPeriphe
         let iPhone = iPhoneDevice()
         merged[iPhone.id] = iPhone
 
-        for device in batteryCenterDevices() where device.kind != .iPhone {
-            merged[device.id] = device
-        }
         for device in bleDevices.values {
             if merged[device.id] == nil {
                 merged[device.id] = device
@@ -96,71 +91,6 @@ final class DeviceBatteryProvider: NSObject, CBCentralManagerDelegate, CBPeriphe
             isCharging: charging,
             kind: .iPhone
         )
-    }
-
-    private func loadBatteryCenterIfNeeded() {
-        _ = dlopen(
-            "/System/Library/PrivateFrameworks/BatteryCenter.framework/BatteryCenter",
-            RTLD_NOW
-        )
-    }
-
-    private func batteryCenterDevices() -> [BatteryDevice] {
-        guard
-            let controllerClass = NSClassFromString("BCBatteryDeviceController") as? NSObject.Type
-        else { return [] }
-
-        let sharedSelector = NSSelectorFromString("sharedInstance")
-        guard controllerClass.responds(to: sharedSelector),
-              let controller = controllerClass.perform(sharedSelector)?.takeUnretainedValue() as? NSObject
-        else { return [] }
-
-        let devicesSelector = NSSelectorFromString("connectedDevices")
-        guard controller.responds(to: devicesSelector),
-              let rawDevices = controller.perform(devicesSelector)?.takeUnretainedValue() as? [NSObject]
-        else { return [] }
-
-        return rawDevices.compactMap { object in
-            if let connected = (object.value(forKey: "connected") as? Bool)
-                ?? (object.value(forKey: "isConnected") as? Bool), !connected {
-                return nil
-            }
-
-            let isInternal = (object.value(forKey: "internal") as? Bool)
-                ?? (object.value(forKey: "isInternal") as? Bool)
-                ?? false
-            if isInternal { return nil }
-
-            let name = (object.value(forKey: "name") as? String)?.trimmingCharacters(in: .whitespacesAndNewlines)
-            guard let name, !name.isEmpty else { return nil }
-
-            let groupName = object.value(forKey: "groupName") as? String
-            let identifier = (object.value(forKey: "identifier") as? String)
-                ?? (object.value(forKey: "matchIdentifier") as? String)
-                ?? name
-            let percent = (object.value(forKey: "percentCharge") as? Int)
-                ?? (object.value(forKey: "percentCharge") as? NSNumber)?.intValue
-            guard let percent, (0...100).contains(percent) else { return nil }
-
-            let charging = (object.value(forKey: "charging") as? Bool)
-                ?? (object.value(forKey: "isCharging") as? Bool)
-                ?? false
-
-            let displayName: String = {
-                if let groupName, !groupName.isEmpty, groupName.caseInsensitiveCompare(name) != .orderedSame {
-                    return "\(groupName) · \(name)"
-                }
-                return name
-            }()
-
-            return BatteryDevice(
-                id: identifier,
-                name: displayName,
-                percentage: percent,
-                isCharging: charging,
-                kind: BatteryDevice.inferKind(name: name, groupName: groupName)
-            )
-        }
     }
 
     func centralManagerDidUpdateState(_ central: CBCentralManager) {

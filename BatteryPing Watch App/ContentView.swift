@@ -99,7 +99,7 @@ struct ContentView: View {
         VStack(alignment: .leading, spacing: 6) {
             Text("No snapshot yet")
                 .font(AppTheme.display(20, weight: .bold))
-            Text("Refresh to pull your iPhone, AirPods, case, and external headphones. The iPhone app can stay closed.")
+            Text("Refresh to pull your iPhone and supported Bluetooth accessories. The iPhone app can stay closed.")
                 .font(AppTheme.label(13, weight: .medium))
                 .foregroundStyle(.white.opacity(0.6))
         }
