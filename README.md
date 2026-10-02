@@ -1,25 +1,34 @@
-# Battery-Pinger-iOS
+# BatteryPing
 
-Battery-Pinger-iOS is an iOS app project focused on battery-aware notifications and reminders.
+BatteryPing shows the iPhone battery and battery levels reported by connected
+Bluetooth accessories on iPhone and Apple Watch.
 
-## Status
+## Requirements
 
-This repository is currently in an early setup state. Core application source files and build configuration are expected to be added as development progresses.
+- Xcode with the iOS 26 and watchOS 26 SDKs
+- iPhone running iOS 26 or later
+- Apple Watch running watchOS 26 or later for Watch support
+- A Bluetooth accessory that exposes the standard Battery Service (UUID 180F)
 
-## Repository Contents
+The app uses public UIKit, CoreBluetooth, SwiftUI, and WatchConnectivity APIs.
+Apple-owned accessories may not expose their individual earbud or case levels
+to third-party apps, so AirPods readings are not guaranteed by public APIs.
 
-- `LICENSE` — project license
-- `README.md` — project overview and notes
+## Run
 
-## Getting Started
+Open `BatteryPing.xcodeproj` in Xcode, select the `BatteryPing` scheme, choose a
+physical iPhone or simulator, and run. Pair a physical Watch with the iPhone to
+test WatchConnectivity. Simulators cannot provide real Bluetooth accessory
+levels.
 
-Once project files are added, this section should include:
+## Privacy
 
-1. Prerequisites (Xcode/iOS SDK versions)
-2. Setup steps
-3. Build and run instructions
-4. Test and lint commands
+BatteryPing reads battery values locally. It does not require an account and
+does not send battery data to a server. Bluetooth access is used to read the
+standard Battery Service from supported connected accessories.
 
 ## Contributing
 
-Contributions are welcome. Please open an issue to discuss changes before submitting a pull request.
+Create a feature branch and open a pull request into `main`. Changes to the
+repository require owner review through `CODEOWNERS` and the protected branch
+ruleset.
